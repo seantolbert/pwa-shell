@@ -1,0 +1,1 @@
+export { NotesHomeRoute } from './NotesHomeRoute';
