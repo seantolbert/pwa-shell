@@ -36,7 +36,7 @@ type OptionalDirty<T extends { dirty: boolean }> = Omit<T, 'dirty'> & {
   dirty?: boolean;
 };
 
-const withDirtyDefault = <T extends { dirty: boolean }>(payload: OptionalDirty<T>) => {
+const withDirtyDefault = <T extends { dirty?: boolean }>(payload: T): T & { dirty: boolean } => {
   return {
     ...payload,
     dirty: payload.dirty ?? true,
@@ -47,7 +47,12 @@ const withDirtyDefault = <T extends { dirty: boolean }>(payload: OptionalDirty<T
 
 export const createNote = async (note: OptionalDirty<LocalNoteRecord>) => {
   const db = getNotesDb();
-  await db.notes.put(withDirtyDefault({ attachments: [], ...note }));
+  await db.notes.put(
+    withDirtyDefault({
+      ...note,
+      attachments: note.attachments ?? [],
+    })
+  );
 };
 
 export const getNoteById = (id: string) => getNotesDb().notes.get(id);

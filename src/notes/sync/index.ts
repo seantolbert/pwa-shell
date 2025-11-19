@@ -1,4 +1,4 @@
-import type { Table } from 'dexie';
+import type { Table, UpdateSpec } from 'dexie';
 import {
   getNotesDb,
   markAttachmentDirty as markAttachmentDirtyLocal,
@@ -113,7 +113,11 @@ const markRecordsClean = async <T extends { dirty: boolean }>(
   table: Table<T, string>,
   ids: string[]
 ) => {
-  await Promise.all(ids.map((id) => table.update(id, { dirty: false } as Partial<T>)));
+  await Promise.all(
+    ids.map((id) =>
+      table.update(id, { dirty: false } as unknown as UpdateSpec<T>)
+    )
+  );
 };
 
 const syncOutNotes = async () => {
@@ -287,10 +291,13 @@ export const syncIn = async () => {
   if (noteError) throw noteError;
   if (folderError) throw folderError;
 
-  const noteLogEntries = await upsertLocalNotes(noteData ?? []);
-  const folderLogEntries = await upsertLocalFolders(folderData ?? []);
+  const safeNoteData = (noteData ?? []) as NoteRow[];
+  const safeFolderData = (folderData ?? []) as FolderRow[];
 
-  const noteIds = (noteData ?? []).map((note) => note.id);
+  const noteLogEntries = await upsertLocalNotes(safeNoteData);
+  const folderLogEntries = await upsertLocalFolders(safeFolderData);
+
+  const noteIds = safeNoteData.map((note) => note.id);
   let byNote: AttachmentDownloadResult = { data: [], error: null } as AttachmentDownloadResult;
   let byCreated: AttachmentDownloadResult = { data: [], error: null } as AttachmentDownloadResult;
 

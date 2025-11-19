@@ -98,7 +98,7 @@ const encryptNoteFields = async (payload: {
 };
 
 export const useNotes = (): UseNotesState => {
-  const [notes, setNotes] = useState<NoteView[]>([]);
+  const [notes, setNotes] = useState<NoteViewModel[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -145,6 +145,12 @@ export const useNotes = (): UseNotesState => {
       folderId = null,
       pinned = false,
       starred = false,
+    }: {
+      title?: string;
+      content?: string;
+      folderId?: string | null;
+      pinned?: boolean;
+      starred?: boolean;
     }) => {
       const id = generateId();
       const now = isoNow();

@@ -9,7 +9,7 @@ import {
 } from '@/notes/db';
 import { decryptText, encryptText } from '@/notes/services/encryption';
 import { markDirty } from '@/notes/sync';
-import { generateId } from '@/notes/utils';
+import { generateId, isoNow } from '@/notes/utils';
 import type { FolderViewModel, LocalFolderRecord } from '@/notes/types';
 
 const decryptFolderRecord = async (record: LocalFolderRecord): Promise<FolderViewModel> => ({

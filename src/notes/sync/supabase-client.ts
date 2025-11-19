@@ -46,7 +46,7 @@ export const uploadEncryptedNotes = async (
 ) => {
   if (!notes.length) return { data: null, error: null };
   const client = getSupabaseClient();
-  return client.from('notes').upsert(notes, { onConflict: 'id' });
+  return client.from('notes').upsert(notes as never, { onConflict: 'id' });
 };
 
 /**
@@ -69,7 +69,7 @@ export const uploadEncryptedFolders = async (
 ) => {
   if (!folders.length) return { data: null, error: null };
   const client = getSupabaseClient();
-  return client.from('folders').upsert(folders, { onConflict: 'id' });
+  return client.from('folders').upsert(folders as never, { onConflict: 'id' });
 };
 
 export const downloadEncryptedFolders = async () => {
@@ -87,7 +87,7 @@ export const uploadEncryptedAttachments = async (
 ) => {
   if (!attachments.length) return { data: null, error: null };
   const client = getSupabaseClient();
-  return client.from('attachments').upsert(attachments, { onConflict: 'id' });
+  return client.from('attachments').upsert(attachments as never, { onConflict: 'id' });
 };
 
 type AttachmentDownloadOptions = {
@@ -118,7 +118,7 @@ export const upsertSyncLogEntries = async (
 ) => {
   if (!entries.length) return { data: null, error: null };
   const client = getSupabaseClient();
-  return client.from('sync_log').upsert(entries, { onConflict: 'id' });
+  return client.from('sync_log').upsert(entries as never, { onConflict: 'id' });
 };
 
 export const fetchSyncLogEntries = async () => {
